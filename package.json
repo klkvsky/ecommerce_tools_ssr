@@ -1,0 +1,31 @@
+{
+  "name": "ecommerce_tools",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "node server",
+    "build:client": "vite build --outDir dist/client --ssrManifest",
+    "build:server": "vite build --outDir dist/server --ssr src/entry-server.js ",
+    "build:old": "vite build"
+  },
+  "dependencies": {
+    "@formkit/i18n": "^1.0.0-beta.6",
+    "@formkit/vue": "^1.0.0-beta.6",
+    "express": "^4.17.3",
+    "firebase": "^9.6.8",
+    "path": "^0.12.7",
+    "pinia": "^2.0.12",
+    "swiper": "^8.0.7",
+    "vue": "^3.2.25",
+    "vue-router": "^4.0.14",
+    "xml2js": "^0.4.23"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^2.2.0",
+    "autoprefixer": "^10.4.4",
+    "postcss": "^8.4.12",
+    "sass": "^1.49.9",
+    "tailwindcss": "^3.0.23",
+    "vite": "^2.9.1"
+  }
+}
