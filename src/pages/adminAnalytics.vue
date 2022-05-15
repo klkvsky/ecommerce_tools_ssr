@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <main
     class="bg-gray-100 dark:bg-gray-800 rounded-2xl h-screen overflow-hidden relative w-full"
   >
@@ -873,4 +873,4 @@
       </div>
     </div>
   </main>
-</template>
+</template> -->
