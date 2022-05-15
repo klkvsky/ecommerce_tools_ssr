@@ -1,26 +1,28 @@
 <script setup>
-let props = defineProps(["title", "content", "id"]);
+let props = defineProps(["info"]);
 </script>
 
 <template>
   <div
-    class="p-6 max-w-sm xl:flex xl:flex-col xl:items-start xl:justify-between bg-white rounded-lg border border-gray-200 shadow-md dark:bg-slate-900 dark:border-gray-700"
+    class="p-6 max-w-sm xl:flex xl:flex-col xl:props.infos-start xl:justify-between bg-white rounded-lg border border-gray-200 shadow-md dark:bg-slate-900 dark:border-gray-700"
   >
     <div>
       <a href="#">
         <h5
           class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"
         >
-          {{ props.title }}
+          {{ props.info.data().title }}
         </h5>
       </a>
-      <p class="mb-4 text-sm font-normal text-gray-700 dark:text-gray-400">
-        {{ props.content }}
+      <p
+        class="mb-4 text-sm font-normal max-h-44 pb-10 overflow-hidden text-gray-700 dark:text-gray-400"
+      >
+        {{ props.info.data().text }}
       </p>
     </div>
     <router-link
-      :to="{ name: 'NewsItem', params: { id: props.id } }"
-      class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      :to="{ name: 'NewsItem', params: { id: props.info.id } }"
+      class="inline-flex props.infos-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
     >
       Читать дальше
       <svg

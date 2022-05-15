@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .btn-primary {
+    @apply text-xl w-full font-semibold rounded-md p-3 bg-blue-500 text-white hover:scale-105 hover:shadow-md hover:opacity-90 transition-all active:scale-95 cursor-pointer flex flex-row gap-4 items-center justify-center;
+  }
+  .btn-secondary {
+    @apply text-xl w-full font-semibold rounded-md py-2.5 mt-2 bg-gray-200 text-black hover:scale-105 hover:shadow-md hover:opacity-90 transition-all active:scale-95 cursor-pointer flex flex-row gap-4 items-center justify-center;
+  }
+  .mn-option {
+    @apply text-lg w-full shadow-lg font-semibold rounded-xl p-4 mt-2 bg-white text-black hover:scale-105 hover:shadow-md hover:opacity-90 transition-all active:scale-95 cursor-pointer flex flex-row gap-4 items-center justify-start;
+  }
+}
+
 @layer utilities {
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {

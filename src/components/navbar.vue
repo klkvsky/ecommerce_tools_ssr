@@ -186,11 +186,19 @@ const filteredList = computed(() => {
                 :class="[store.isEmptyCart ? 'opacity-0' : 'opacity-100']"
               >
                 <div
-                  class="grid place-items-center w-5 h-5 bg-blue-500 dark:bg-blue-800 text-white shadow-md rounded-full text-xs font-semibold"
+                  class="grid place-items-center w-5 h-5 bg-blue-500 dark:bg-blue-800 text-white shadow rounded-full text-xs font-semibold"
                 >
                   {{ store.cartQuantity }}
                 </div>
               </div>
+            </router-link>
+          </li>
+          <li>
+            <router-link
+              to="/cart"
+              class="block py-2 pr-4 pl-4 text-gray-700 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent cursor-pointer lg:flex lg:flex-row lg:gap-1"
+            >
+              Личный Кабинет
             </router-link>
           </li>
         </ul>

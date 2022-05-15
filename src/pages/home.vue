@@ -8,9 +8,12 @@ import {
   updateDoc,
   addDoc,
   doc,
+  orderBy,
+  startAfter,
+  limit,
+  getDocs,
 } from "firebase/firestore";
 import { db } from "../firebase";
-
 // End Firebase
 
 // UI ELEMENTS
@@ -34,24 +37,6 @@ import testXML from "../assets/xmltojson.json";
 let modules = [Navigation, Pagination, A11y];
 // Swiper
 
-let fakeItems = ref([]);
-let fakeCategories = ref([]);
-
-// Fake API Store
-async function getItems() {
-  await fetch("https://fakestoreapi.com/products")
-    .then((res) => res.json())
-    .then((json) => (fakeItems.value = json));
-}
-
-async function getCategories() {
-  await fetch("https://fakestoreapi.com//products/categories")
-    .then((res) => res.json())
-    .then((json) => (fakeCategories.value = json));
-}
-
-// End Fake API Store
-
 // News Posts
 let newsPosts = ref([]);
 async function newsUpdate() {
@@ -64,24 +49,52 @@ async function newsUpdate() {
   });
 }
 
-// let FB_categories = ref([]);
+// let categories = ref([]);
+// async function categoriesUpdate() {
+//   categories.value = [];
+//   const next = query(
+//     collection(db, "categories"),
+//     orderBy("category"),
+//     startAfter(0),
+//     limit(14)
+//   );
+
+//   categories.value = await getDocs(next);
+// }
+let categories = ref([]);
+async function categoriesUpdate() {
+  categories.value = [];
+  const q = query(collection(db, "promoCategories"));
+  await onSnapshot(q, (snapshot) => {
+    categories.value = [];
+    snapshot.forEach((doc) => {
+      categories.value.push(doc);
+    });
+  });
+}
+
+// let categories = ref([]);
 // async function categoriesUpdate() {
 //   const q = query(collection(db, "categories"));
 //   await onSnapshot(q, (snapshot) => {
-//     FB_categories.value = [];
+//     categories.value = [];
 //     snapshot.forEach((doc) => {
-//       FB_categories.value.push(doc.data());
+//       categories.value.push(doc);
 //     });
 //   });
 // }
-onMounted(() => {
-  newsUpdate();
-  catalogUpdate();
-  getItems();
-  getCategories();
-  // categoriesUpdate()
-});
-// End News Posts
+
+let promos = ref([]);
+async function promosUpdate() {
+  const q = query(collection(db, "promos"));
+  await onSnapshot(q, (snapshot) => {
+    promos.value = [];
+    snapshot.forEach((doc) => {
+      promos.value.push(doc);
+    });
+  });
+}
+
 let catalog = ref([]);
 async function catalogUpdate() {
   const q = query(collection(db, "catalog"));
@@ -93,41 +106,13 @@ async function catalogUpdate() {
   });
 }
 
-// function checkXML (){
-//   console.log(testXML.yml_catalog.shop.categories);
-// }
-
-// checkXML()
-
-// async function generateCategories() {
-//   console.log("started");
-//   for (
-//     let step = 0;
-//     step < testXML.yml_catalog.shop.offers.offer.length;
-//     step++
-//   ) {
-//     try {
-//       const docRef = await addDoc(collection(db, "catalog"), {
-//         title: testXML.yml_catalog.shop.offers.offer[step].name,
-//         price: testXML.yml_catalog.shop.offers.offer[step].price,
-//         currency: testXML.yml_catalog.shop.offers.offer[step].currencyId,
-//         category: testXML.yml_catalog.shop.offers.offer[step].categoryId,
-//         pictures: testXML.yml_catalog.shop.offers.offer[step].picture,
-//         weight: testXML.yml_catalog.shop.offers.offer[step].weight,
-//         model: testXML.yml_catalog.shop.offers.offer[step].model,
-//         vendor: testXML.yml_catalog.shop.offers.offer[step].vendor,
-//         vendorCode: testXML.yml_catalog.shop.offers.offer[step].vendorCode,
-//         count: testXML.yml_catalog.shop.offers.offer[step].count,
-//         description: testXML.yml_catalog.shop.offers.offer[step].description,
-//         barcode: testXML.yml_catalog.shop.offers.offer[step].barcode,
-//         params: testXML.yml_catalog.shop.offers.offer[step].param,
-//       });
-//       console.log(step);
-//     } catch (e) {
-//       console.error("Error adding document: ", e);
-//     }
-//   }
-// }
+// new Date().toLocaleTimeString
+onMounted(() => {
+  newsUpdate();
+  catalogUpdate();
+  promosUpdate();
+  categoriesUpdate();
+});
 </script>
 
 <template>
@@ -139,9 +124,11 @@ async function catalogUpdate() {
     <p>Бесплатная доставка по всей России от 15 000 рублей</p>
   </div>
 
+  <div id="myTable"></div>
+
   <CartIcon />
 
-  <div class="flex flex-row items-start justify-start gap-2 mt-4 mx-6">
+  <div class="flex flex-row items-start justify-start gap-6 mt-4 mx-6">
     <swiper
       :modules="modules"
       :slides-per-view="1"
@@ -150,57 +137,55 @@ async function catalogUpdate() {
       class="max-w-screen-lg lg:max-w-full xl:max-w-screen-lg mt-0"
       :pagination="{ clickable: true }"
     >
-      <swiper-slide>
+      <swiper-slide v-for="promo in promos.slice().reverse()" :key="promo.id">
         <div
-          class="max-w-screen-lg lg:max-w-full bg-purple-500 shadow-xl rounded-lg text-center pt-64 pb-12"
+          class="max-w-screen-lg lg:max-w-full shadow-xl rounded-lg text-center h-96 pt-52 pb-12 relative"
         >
-          <h2
-            class="text-3xl leading-9 font-bold tracking-tight text-white sm:text-4xl sm:leading-10"
-          >
-            Акции находятся тут
-          </h2>
-          <div class="mt-4 flex justify-center">
-            <div class="inline-flex rounded-md bg-white shadow">
-              <a href="#" class="text-gray-700 font-bold py-2 px-6">
-                Перейти
-              </a>
-            </div>
-          </div>
-        </div>
-      </swiper-slide>
-      <swiper-slide>
-        <div
-          class="max-w-screen-lg lg:max-w-full bg-purple-500 shadow-xl rounded-lg text-center pt-64 pb-12"
-        >
-          <h2
-            class="text-3xl leading-9 font-bold tracking-tight text-white sm:text-4xl sm:leading-10"
-          >
-            Акции находятся тут
-          </h2>
-          <div class="mt-4 flex justify-center">
-            <div class="inline-flex rounded-md bg-white shadow">
-              <a href="#" class="text-gray-700 font-bold py-2 px-6">
-                Перейти
-              </a>
+          <img
+            :src="promo.data().image"
+            class="rounded-lg absolute top-0 h-full w-full object-cover left-0 z-0 opacity-90"
+          />
+          <div
+            class="w-full h-full absolute top-0 left-0 opacity-100 z-0 bg-gradient-to-t from-[#000000ad] to-transparent rounded-lg"
+          ></div>
+          <div
+            class="w-full h-full absolute top-0 left-0 opacity-100 z-0 bg-gradient-to-r from-[#000000ad] to-transparent rounded-lg"
+          ></div>
+          <div class="z-20 relative">
+            <h2
+              class="text-xl leading-9 font-bold tracking-tight text-white sm:text-3xl sm:leading-10"
+            >
+              {{ promo.data().title }}
+            </h2>
+            <h4 class="font-medium text-white sm:text-base opacity-90">
+              {{ promo.data().text }}
+            </h4>
+            <div class="mt-4 flex justify-center">
+              <div class="inline-flex rounded-md bg-white shadow">
+                <router-link
+                  class="text-gray-700 font-bold py-2 px-6"
+                  :to="{ path: promo.data().link }"
+                  replace
+                >
+                  Перейти
+                </router-link>
+              </div>
             </div>
           </div>
         </div>
       </swiper-slide>
     </swiper>
 
-    <aside class="hidden xl:flex max-w-screen-sm" aria-label="Sidebar">
+    <aside class="hidden xl:flex max-w-screen-sm h-96" aria-label="Sidebar">
       <div class="bg-gray-50 shadow-md rounded-lg dark:bg-gray-900">
         <!--  -->
-        <ul class="grid grid-cols-2 gap-4 py-3 px-2">
-          <li
-            v-for="category in testXML.yml_catalog.shop.categories.category.slice(
-              0,
-              14
-            )"
-            :key="category"
-          >
+        <ul class="grid grid-cols-2 gap-3.5 py-3 px-2">
+          <li v-for="category in categories" :key="category.id">
             <router-link
-              :to="{ name: 'Category', params: { id: category } }"
+              :to="{
+                name: 'Category',
+                params: { id: category.data().category },
+              }"
               class="flex items-center p-2 text-xs font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <svg
@@ -213,7 +198,73 @@ async function catalogUpdate() {
                 <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
               </svg>
               <span class="flex-1 ml-3 whitespace-nowrap capitalize truncate">
-                {{ category }}
+                {{ category.data().name }}
+              </span>
+            </router-link>
+          </li>
+          <li v-for="category in categories" :key="category.id">
+            <router-link
+              :to="{
+                name: 'Category',
+                params: { id: category.data().category },
+              }"
+              class="flex items-center p-2 text-xs font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <svg
+                class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+              </svg>
+              <span class="flex-1 ml-3 whitespace-nowrap capitalize truncate">
+                {{ category.data().name }}
+              </span>
+            </router-link>
+          </li>
+          <li v-for="category in categories" :key="category.id">
+            <router-link
+              :to="{
+                name: 'Category',
+                params: { id: category.data().category },
+              }"
+              class="flex items-center p-2 text-xs font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <svg
+                class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+              </svg>
+              <span class="flex-1 ml-3 whitespace-nowrap capitalize truncate">
+                {{ category.data().name }}
+              </span>
+            </router-link>
+          </li>
+          <li v-for="category in categories.slice(0, 2)" :key="category.id">
+            <router-link
+              :to="{
+                name: 'Category',
+                params: { id: category.data().category },
+              }"
+              class="flex items-center p-2 text-xs font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <svg
+                class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+              </svg>
+              <span class="flex-1 ml-3 whitespace-nowrap capitalize truncate">
+                {{ category.data().name }}
               </span>
             </router-link>
           </li>
@@ -228,15 +279,9 @@ async function catalogUpdate() {
     <aside class="w-full xl:hidden lg:mx-4" aria-label="Sidebar">
       <div class="bg-gray-50 shadow-md rounded-lg dark:bg-gray-900">
         <ul class="grid grid-cols-2 lg:grid-cols-5 gap-4 py-3 px-2">
-          <li
-            v-for="category in testXML.yml_catalog.shop.categories.category.slice(
-              0,
-              14
-            )"
-            :key="category"
-          >
+          <li v-for="category in categories.docs" :key="category.id">
             <router-link
-              :to="{ name: 'Category', params: { id: category } }"
+              :to="{ name: 'Category', params: { id: category.id } }"
               class="flex items-center p-2 text-xs font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <svg
@@ -249,7 +294,7 @@ async function catalogUpdate() {
                 <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
               </svg>
               <span class="flex-1 ml-3 whitespace-nowrap capitalize">
-                {{ category }}
+                {{ category.data().category }}
               </span>
             </router-link>
           </li>
@@ -322,7 +367,7 @@ async function catalogUpdate() {
               class="h-96 lg:h-full bg-[#DCE0D9] flex flex-col items-center justify-center text-2xl rounded-lg"
             >
               <img
-                src="https://smokenvape.store/upload/iblock/23a/Logo.png"
+                src="https://nordberg82.ru/image/catalog/logo.png"
                 class="w-1/2"
               />
             </div>
@@ -432,25 +477,21 @@ async function catalogUpdate() {
 
     <div class="flex flex-col items-start justify-start gap-4 lg:mx-4">
       <h1 class="font-semibold text-xl">Новости</h1>
-      <div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        <NewsCard
-          v-for="item in newsPosts"
-          :key="item.id"
-          :title="item.data().Title"
-          :content="item.data().Content"
-          :id="item.id"
-        />
-        <NewsCard
+      <div
+        class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-end justify-end"
+      >
+        <NewsCard v-for="item in newsPosts" :key="item.id" :info="item" />
+        <!-- <NewsCard
           v-for="item in newsPosts.slice(0, 2)"
           :key="item.id"
           :title="item.data().Title"
           :content="item.data().Content"
           :id="item.id"
-        />
+        /> -->
 
         <router-link
           to="/newsPage"
-          class="inline-flex lg:col-start-1 xl:col-start-4 items-center justify-between mt-4 py-2 px-4 text-lg font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          class="inline-flex lg:col-start-1 xl:col-start-4 items-center justify-between mt-4 py-2 px-4 text-lg font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 max-h-10"
         >
           Посмотреть все новости
           <svg

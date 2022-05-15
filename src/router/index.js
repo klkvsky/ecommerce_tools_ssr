@@ -38,6 +38,13 @@ import Item from "../pages/item.vue";
 import NewsItem from "../pages/newsItem.vue";
 import Cart from "../pages/cart.vue";
 import Category from "../pages/category.vue";
+import Admin from "../pages/admin.vue";
+import adminItems from "../pages/adminItems.vue";
+import adminUsers from "../pages/adminUsers.vue";
+import adminSales from "../pages/adminSales.vue";
+import adminAnalytics from "../pages/adminAnalytics.vue";
+import adminPreference from "../pages/adminPreference.vue";
+import adminNews from "../pages/adminNews.vue";
 
 // Auto generates routes from vue files under ./pages
 // https://vitejs.dev/guide/features.html#glob-import
@@ -62,6 +69,43 @@ const routes = [
   { path: "/item/:id", name: "Item", component: Item },
   { path: "/news/:id", name: "NewsItem", component: NewsItem },
   { path: "/category/:id", name: "Category", component: Category },
+  {
+    path: "/admin",
+    name: "Admin",
+    component: Admin,
+    children: [
+      {
+        path: "items",
+        name: "adminItems",
+        component: adminItems,
+      },
+      {
+        path: "users",
+        name: "adminUsers",
+        component: adminUsers,
+      },
+      {
+        path: "sales",
+        name: "adminSales",
+        component: adminSales,
+      },
+      {
+        path: "analytics",
+        name: "adminAnalytics",
+        component: adminAnalytics,
+      },
+      {
+        path: "preference",
+        name: "adminPreference",
+        component: adminPreference,
+      },
+      {
+        path: "news",
+        name: "adminNews",
+        component: adminNews,
+      },
+    ],
+  },
 ];
 
 export function createRouter() {

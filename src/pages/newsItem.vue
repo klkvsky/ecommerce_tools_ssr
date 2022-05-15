@@ -10,7 +10,6 @@ const route = useRoute();
 const store = useCartStore();
 
 let itemInfo = ref({});
-
 async function getData() {
   const docRef = doc(db, "news", route.params.id);
   const docSnap = await getDoc(docRef);
@@ -24,15 +23,15 @@ onMounted(() => {
 <template>
   <Navbar />
   <div
-    class="mx-4 mt-4 bg-gray-50 dark:bg-slate-900 dark:text-white p-4 rounded-lg flex flex-col items-start justify-start gap-4"
+    class="mt-4 bg-gray-50 w-3/5 mx-auto dark:bg-slate-900 dark:text-white p-4 rounded-lg flex flex-col items-start justify-start gap-4"
     v-if="itemInfo"
   >
     <h1 class="text-2xl font-semibold">
-      {{ itemInfo.Title }}
+      {{ itemInfo.title }}
     </h1>
 
     <p>
-      {{ itemInfo.Content }}
+      {{ itemInfo.text }}
     </p>
   </div>
 

@@ -5,20 +5,13 @@ import FooterComponent from "../components/footer.vue";
 import BigCard from "../components/bigCard.vue";
 import SmallCard from "../components/smallCard.vue";
 import { useRoute } from "vue-router";
+import { db } from "../firebase.js";
+import { doc, getDoc } from "firebase/firestore";
 
 const route = useRoute();
 
 let sortOption = ref(false);
-
 let sortingOption = ref("По названию");
-
-let fakeItems = ref([]);
-async function getItems() {
-  await fetch(`https://fakestoreapi.com/products/category/${route.params.id}`)
-    .then((res) => res.json())
-    .then((json) => (fakeItems.value = json));
-}
-
 watch(sortingOption, (newQuestion, oldQuestion) => {
   sortedItems.value;
   sortOption.value = false;
@@ -42,17 +35,27 @@ const sortedItems = computed(() => {
   }
 });
 
-onMounted(() => {
-  getItems();
-});
+let categoryName = ref("");
+async function getCategory() {
+  const docRef = doc(db, "categories", route.params.id);
+  const docSnap = await getDoc(docRef);
+  categoryName.value = docSnap;
+}
+
+getCategory()
 </script>
 
 <template>
   <Navbar />
   <h1 class="mx-4 lg:mx-8 mb-4 text-2xl font-medium">
-    Категория: <span class="font-bold capitalize"> {{ route.params.id }} </span>
+    Категория:
+    <span class="font-bold capitalize" v-if="categoryName">
+      {{ categoryName.data().category }}
+    </span>
   </h1>
-  <div class="flex flex-row gap-4 w-screen items-center justify-start lg:mx-4 pl-4">
+  <div
+    class="flex flex-row gap-4 w-screen items-center justify-start lg:mx-4 pl-4"
+  >
     <!-- <div class="relative">
       <button
         @click="colorOption = !colorOption"
@@ -168,7 +171,9 @@ onMounted(() => {
       </div>
     </div>
   </div>
-  <div class="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6 lg:mx-4 py-6 px-4 min-h-screen">
+  <div
+    class="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6 lg:mx-4 py-6 px-4 min-h-screen"
+  >
     <SmallCard
       v-for="item in fakeItems"
       :key="item.id"

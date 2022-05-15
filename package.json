@@ -3,7 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "node server",
+    "dev:vite": "vite",
+    "dev:ssr": "node server",
     "build:client": "vite build --outDir dist/client --ssrManifest",
     "build:server": "vite build --outDir dist/server --ssr src/entry-server.js ",
     "build:old": "vite build"
@@ -12,7 +13,7 @@
     "@formkit/i18n": "^1.0.0-beta.6",
     "@formkit/vue": "^1.0.0-beta.6",
     "express": "^4.17.3",
-    "firebase": "^9.6.8",
+    "firebase": "^9.8.1",
     "path": "^0.12.7",
     "pinia": "^2.0.12",
     "swiper": "^8.0.7",
