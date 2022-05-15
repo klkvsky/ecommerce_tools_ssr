@@ -36,7 +36,9 @@ catalogUpdate();
         class="md:gap-8 md:grid md:grid-cols-4 border sm:p-8  dark:border-gray-700 shadow-lg rounded-2xl p-4 bg-white dark:bg-gray-900 w-full"
         v-for="item in salesHistory" :id="item.time">
         <div>
-          <div class="flex items-center mb-6 space-x-4 sticky top-4">
+          <div class="flex flex-col sticky top-0">
+
+          <div class="flex items-center mb-6 space-x-4">
             <div class="space-y-1 font-medium text-xl dark:text-white">
               <p>{{ item.name }}</p>
               <!-- <div
@@ -46,7 +48,7 @@ catalogUpdate();
               </div> -->
             </div>
           </div>
-          <ul class="space-y-4 text-sm text-gray-500 dark:text-gray-400 sticky top-16">
+          <ul class="space-y-4 text-sm text-gray-500 dark:text-gray-400">
             <li class="flex items-center">
               <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
@@ -76,6 +78,7 @@ catalogUpdate();
               </svg>{{ item.adress }}
             </li>
           </ul>
+          </div>
         </div>
         <div class="col-span-3 mt-6 md:mt-0">
           <div class="flex items-start mb-5">

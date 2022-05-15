@@ -513,7 +513,7 @@ onMounted(() => {
   <FooterComponent />
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .swiper-button-next,
 .swiper-button-prev {
   background-color: #ffffff;

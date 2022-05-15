@@ -84,17 +84,34 @@ async function getData() {
 //   }
 // });
 
-// function addNewCatalog() {
-//   testXML.yml_catalog.shop.categories.category.forEach((element) =>
-//     newItem(element)
-//   );
-// }
+let vendors = ref([
+  "DEXX",
+  "ЗУБР",
+  "STAYER",
+  "СИБИН",
+  "GENERAL FITTINGS",
+  "KRAFTOOL",
+  "MIRAX",
+  "GRINDA",
+  "Rapid",
+  "STEHER",
+  "URAGAN",
+  "Запчасти для эл-инстр.",
+]);
 
-// async function newItem(el) {
-//   const docRef = await addDoc(collection(db, "categories"), {
-//     category: el,
-//   });
-// }
+function addNewCatalog() {
+  // testXML.yml_catalog.shop.offers.offer.forEach((element) => newItem(element));
+  vendors.value.forEach((element) => newItem(element));
+}
+
+async function newItem(el) {
+  console.log("item " + el);
+  const docRef = await addDoc(collection(db, "vendors"), {
+    vendor: el,
+  });
+}
+
+// addNewCatalog();
 </script>
 
 <template>
