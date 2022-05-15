@@ -787,11 +787,6 @@
                   <ul>
                     <li class="flex items-center my-6 space-x-2">
                       <a href="#" class="block relative">
-                        <img
-                          alt="profil"
-                          src="/images/person/1.jpg"
-                          class="mx-auto object-cover rounded-full h-10 w-10"
-                        />
                       </a>
                       <div class="flex flex-col">
                         <span
