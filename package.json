@@ -5,6 +5,7 @@
   "scripts": {
     "dev:vite": "vite",
     "dev:ssr": "node server",
+    "build": "npm run build:client && npm run build:server",
     "build:client": "vite build --outDir dist/client --ssrManifest",
     "build:server": "vite build --outDir dist/server --ssr src/entry-server.js ",
     "build:old": "vite build"
