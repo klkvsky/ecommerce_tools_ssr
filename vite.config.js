@@ -10,6 +10,20 @@ const nestedVirtualId = "\0" + nestedVirtualFile;
 module.exports = {
   plugins: [
     vuePlugin(),
+    vueJsx(),
+    {
+      name: "virtual",
+      resolveId(id) {
+        if (id === "@foo") {
+          return id;
+        }
+      },
+      load(id) {
+        if (id === "@foo") {
+          return `export default { msg: 'hi' }`;
+        }
+      },
+    },
     {
       name: "virtual-module",
       resolveId(id) {
