@@ -1,4 +1,5 @@
 const vuePlugin = require("@vitejs/plugin-vue");
+const vueJsx = require("@vitejs/plugin-vue-jsx");
 const virtualFile = "@virtual-file";
 const virtualId = "\0" + virtualFile;
 const nestedVirtualFile = "@nested-virtual-file";
