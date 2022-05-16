@@ -195,10 +195,10 @@ const filteredList = computed(() => {
           </li>
           <li>
             <router-link
-              to="/cart"
+              to="/admin"
               class="block py-2 pr-4 pl-4 text-gray-700 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent cursor-pointer lg:flex lg:flex-row lg:gap-1"
             >
-              Личный Кабинет
+              Админка
             </router-link>
           </li>
         </ul>
